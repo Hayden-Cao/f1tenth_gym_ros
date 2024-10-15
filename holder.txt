@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+import rclpy
+from rclpy.node import Node
+import numpy as np
+from sensor_msgs.msg import LaserScan
+from nav_msgs.msg import Odometry
+from ackermann_msgs.msg import AckermannDriveStamped
+from collections import deque
+
+class My_Safety_Node(Node):
+
+    def __init__(self):
+        super().__init__('my_safety_node')
+
+        self.velocity = 0.0
+        self.threshold = 0.0018
+
+        # Topic names derived from the f1tenth_gym_ros github repo: https://github.com/f1tenth/f1tenth_gym_ros/blob/main/README.md
+        self.create_subscription(LaserScan, '/scan', self.read_distance, 1)
+        #self.create_subscription(Odometry, 'ego_racecar/odom', self.read_speed, 1)
+        self.drive_control = self.create_publisher(AckermannDriveStamped, '/drive', 1)
+
+        self.raw_dist_start = None
+        self.time_start_sec = 0
+        self.time_start_ns = 0
+
+
+
+    def read_distance(self, scan_msg: LaserScan):
+        raw_dist_end = np.array(scan_msg.ranges)
+        wait_time = (scan_msg.header.stamp.sec - self.time_start_sec) + ((scan_msg.header.stamp.nanosec - self.time_start_ns) / 1e9)
+
+        if self.raw_dist_start is None:
+            self.raw_dist_start = raw_dist_end.copy()
+
+
+        bitmask_filter = (
+            (self.raw_dist_start >= scan_msg.range_min) & 
+            (self.raw_dist_start <= scan_msg.range_max) & 
+            ~np.isnan(raw_dist_end) & 
+            ~np.isinf(raw_dist_end)
+        )
+
+     
+        valid_indexs = np.where(bitmask_filter)[0]
+        range_rates = (raw_dist_end[valid_indexs] - self.raw_dist_start[valid_indexs]) / wait_time
+        dist_inst = np.array(scan_msg.ranges)[valid_indexs]
+        valid_ttc_indexs = (dist_inst > 1e-4) & (-1 * (range_rates) > 1e-4)
+        ttcs = (dist_inst[valid_ttc_indexs] / (-1 * range_rates[valid_ttc_indexs])) if np.any(valid_ttc_indexs) else np.array([])
+
+        if ttcs.size > 0 and ttcs.min() < self.threshold:
+            print(f"Wait Time = {wait_time:.4f}")
+            ack = AckermannDriveStamped()
+            ack.drive.speed = 0.0
+            self.drive_control.publish(ack)
+            print(f'Emergency Brake Activated (due to TTC = {ttcs.min():.4f} secs)')
+
+        self.raw_dist_start = np.array(scan_msg.ranges)
+        self.time_start_sec = scan_msg.header.stamp.sec
+        self.time_start_ns = scan_msg.header.stamp.nanosec
+        
+     
+
+def main():
+    rclpy.init()
+    my_safety_node = My_Safety_Node()
+    my_safety_node.get_logger().info("Hayden Cao - Safety Node Initialized")
+    rclpy.spin(my_safety_node)
+    my_safety_node.destroy_node()
+    rclpy.shutdown()
+
+
+
+if __name__ == '__main__':
+    main()
