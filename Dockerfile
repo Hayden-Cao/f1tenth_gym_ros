@@ -33,6 +33,8 @@ RUN apt-get update --fix-missing && \
                        libeigen3-dev \
                        tmux \
                        ros-foxy-rviz2 \
+                       ros-foxy-ros-base \
+                       ros-foxy-ament-cmake \
                        bc \
                        python3-tk
 RUN apt-get -y dist-upgrade

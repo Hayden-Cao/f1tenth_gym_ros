@@ -90,11 +90,10 @@ class SafetyNode(Node):
         ttcs = ranges[range_rates > range_rate_min] / range_rates[range_rates > range_rate_min]
 
         if ttcs.size > 0 and ttcs.min() < self.tbb:
-            print(f"Ranges rates = {range_rates}")
             ack = AckermannDriveStamped()
             ack.drive.speed = 0.0
             self.pub_drive.publish(ack)
-            print(f'Emergency Brake Activated (due to TTC = {ttcs.min():.4f} secs)')
+            self.get_logger().info(f'Emergency Brake Activated (due to TTC = {ttcs.min():.4f} secs)')
 
 def main(args=None):
     """

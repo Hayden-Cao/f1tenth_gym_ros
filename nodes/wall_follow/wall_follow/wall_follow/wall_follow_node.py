@@ -186,8 +186,8 @@ class WallFollow(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    print("WallFollow Initialized")
     wall_follow_node = WallFollow()
+    wall_follow_node.get_logger().info("Wall Follow Initialized")
     rclpy.spin(wall_follow_node)
 
     # Destroy the node explicitly
