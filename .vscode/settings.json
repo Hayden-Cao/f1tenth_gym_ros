@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/mnt/c/Users/caoha/f1tenth_gym_ros/nodes/f1tenth_bringup"
+    "cmake.sourceDirectory": "/mnt/c/Users/caoha/f1tenth_gym_ros/nodes/f1tenth_bringup",
+    "python.analysis.extraPaths": ["/usr/lib/python3/dist-packages"]
 }

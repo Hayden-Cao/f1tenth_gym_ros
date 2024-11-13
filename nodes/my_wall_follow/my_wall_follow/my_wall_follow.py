@@ -1,117 +1,89 @@
-#!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
 import numpy as np
 from sensor_msgs.msg import LaserScan
 from ackermann_msgs.msg import AckermannDriveStamped
+from rclpy.action import ActionClient
+from stop_interfaces.action import StopOrGo
 
-class My_Wall_Follow_Node(Node):
+class WallFollow(Node):
     def __init__(self):
-        super().__init__('my_wall_follow_node')
-        self.create_subscription(LaserScan, '/scan', self.scan_callback, 1)
-        self.drive_control  = self.create_publisher(AckermannDriveStamped, '/drive', 1)
+        super().__init__('wall_follow_node')
+        lidarscan_topic = '/scan'
+        drive_topic = '/drive'
+        self.sub_scan = self.create_subscription(LaserScan, lidarscan_topic, self.scan_callback, 1)
+        self.pub_drive = self.create_publisher(AckermannDriveStamped, drive_topic, 1)
+        self.kp = 0.255
+        self.ki = -0.028
+        self.kd = 0.55
+        self.error = 0
+        self.integral = 0
+        self.prev_error = 0
+        self.velocity = 0.0
+        self.dist = 1.0
+        self.lookahead_dist = 0.3
+        self.A_angle = np.radians(30)
+        self.B_angle = np.radians(90)
+        self.action_client = ActionClient(self, StopOrGo, "stop_or_go")
 
-        self.kp                  = 5.0
-        self.ki                  = 0.6
-        self.kd                  = 0.07
-        self.tau                 = 0.05
-        
-        self.derivative          = 0.0
-        self.integral            = 0.0
+    def get_range(self, range_data, angle_data, angle):
+        diff_array = np.absolute(angle_data - angle)
+        np.absolute(diff_array)
+        index = diff_array.argmin()
+        return range_data[index] 
 
-        self.prev_error          = 0.0
-        self.error               = 0.0
-        self.velocity            = 0.0
+    def get_error(self, range_data, angle_data, dist):
+        A_dist = self.get_range(range_data, angle_data, self.A_angle)
+        B_dist = self.get_range(range_data, angle_data, self.B_angle)
+        theta = self.B_angle - self.A_angle
+        alpha = np.arctan((A_dist * np.cos(theta) - B_dist) / (A_dist * np.sin(theta)))
+        current_dist = B_dist * np.cos(alpha)
+        error = dist - current_dist
+        future_dist = current_dist + self.lookahead_dist * np.sin(alpha)
+        self.integral = self.dist - current_dist
+        self.prev_error = -self.velocity * np.sin(alpha)
+        return error 
 
-        self.angle_A             = np.radians(25)
-        self.angle_B             = np.radians(90)
-        self.lookahead_dist      = 0.5
-        self.target_dist         = 0.9
-
-        self.angle_min           = -2.349999
-        self.angle_increment     = 0.0043518
-
-        self.upper_lim_int       = 1.0
-        self.lower_lim_int       = -1.0
-        
-        self.start_time          = 0.0
-        self.end_time            = 0.0
-        self.prev_measurment     = 0.0
-        self.current_measurement = 0.0
-
-    def get_range(self, range_data, target_angle):
-        angle_index = np.arange(len(range_data))
-        angle_array = self.angle_min + self.angle_increment * angle_index
-        temp = np.abs(angle_array - target_angle)
-        index = np.argmin(temp)
-        
-        return range_data[index]
-        
-
-    def get_error(self, range_data, dist):
-
-        A = self.get_range(range_data, self.angle_A)
-        B = self.get_range(range_data, self.angle_B)
-
-        theta = self.angle_B - self.angle_A
-        alpha = np.arctan((A*np.cos(theta) - B) / (A*np.sin(theta)))
-        dist_calc = B*np.cos(alpha)
-        self.current_measurement = dist_calc
-        dist_lookahead = dist_calc + self.lookahead_dist * np.sin(alpha)
-        error = dist - dist_lookahead
-
-        return error
-
-    def pid_control(self, error, velocity):
-
-        period = np.abs(self.end_time - self.start_time)
-        self.integral = self.integral + 0.5 * period * (error + self.prev_error)
-        
-        if(self.integral > self.upper_lim_int):
-            self.integral = self.upper_lim_int
-        elif (self.integral < self.lower_lim_int):
-            self.integral = self.lower_lim_int
-            
-        self.derivative = -(2 * self.tau * (self.current_measurement - self.prev_measurment) + (2 * self.tau - period) * self.derivative) / (2 * self.tau + period)
-        angle = self.kp * error + self.ki * self.integral + self.kd * self.derivative
-            
+    def pid_control(self, error):
+        angle = self.kp * error + self.ki * self.integral + self.kd * self.prev_error 
         if np.abs(angle) < np.radians(11):
-            self.velocity = velocity 
+            self.velocity = 1.5
         elif np.abs(angle) < np.radians(21):
-            self.velocity = 2*velocity / 3 
+            self.velocity = 1.0
         else:
-            self.velocity = velocity / 3 
+            self.velocity = 0.5
+        
+        self.trigger_action_goal(speed=self.velocity, angle=-angle)
 
-        drive_msg = AckermannDriveStamped()
-        drive_msg.drive.steering_angle = -angle
-        drive_msg.drive.steering_angle_velocity = 0.0
-        drive_msg.drive.speed = self.velocity 
-        self.drive_control.publish(drive_msg)
+    def scan_callback(self, scan_msg):
+        ranges_temp = np.array(scan_msg.ranges)
+        range_min = scan_msg.range_min
+        range_max = scan_msg.range_max
+        angle_min = scan_msg.angle_min
+        angle_inc = scan_msg.angle_increment
+        ranges_temp = np.where((ranges_temp < range_min) | (ranges_temp > range_max) | np.isnan(ranges_temp) | np.isinf(ranges_temp), -1, ranges_temp)
+        ranges = ranges_temp[ranges_temp != -1]
+        theta_idxs = np.arange(len(ranges_temp))[ranges_temp != -1]
+        thetas = angle_min + angle_inc * theta_idxs
+        error = self.get_error(ranges, thetas, self.dist)
+        self.pid_control(error)
 
+    def trigger_action_goal(self, speed: float, angle: float):
+        goal_msg = StopOrGo.Goal()
+        goal_msg.speed = speed
+        goal_msg.angle = angle
+        self.action_client.send_goal_async(goal_msg)
 
-
-    def scan_callback(self, scan_msg: LaserScan):
-        range_data = np.array(scan_msg.ranges)
-        valid_index = np.nonzero(
-            np.isfinite(range_data)
-        )[0]
-        valid_data = range_data[valid_index]
-        self.error = self.get_error(np.array(valid_data), self.target_dist) 
-        velocity = 1.5 
-        self.pid_control(self.error, velocity)
-        self.prev_error = self.error
-        self.prev_measurment = self.current_measurement
-
-
-
-def main():
-    rclpy.init()
-    my_wall_follow_node = My_Wall_Follow_Node()
-    my_wall_follow_node.get_logger().info("Hayden Cao - Wall Follow Node Initialized")
-    rclpy.spin(my_wall_follow_node)
-    my_wall_follow_node.destroy_node()
+def main(args=None):
+    rclpy.init(args=args)
+    wall_follow_node = WallFollow()
+    wall_follow_node.get_logger().info("Hayden Cao - Wall Follow Initialized")
+    rclpy.spin(wall_follow_node)
+    wall_follow_node.destroy_node()
     rclpy.shutdown()
 
-
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except rclpy.ROSInterruptException:
+        pass

@@ -1,0 +1,8 @@
+#Goal
+ackermann_msgs/AckermannDriveStamped speed_zero
+---
+#Result
+bool stopped
+---
+#Feedback 
+float32 current_speed

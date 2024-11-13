@@ -1,6 +1,5 @@
 import rclpy
 from rclpy.node import Node
-
 import numpy as np
 from sensor_msgs.msg import LaserScan
 from ackermann_msgs.msg import AckermannDriveStamped, AckermannDrive
@@ -54,7 +53,6 @@ class ReactiveFollowGap(Node):
         """
         # As the angle in angle_data are not perfect, we can only choose the angles closest to what we want
         index = np.argmin(np.abs(angle_data - self.angle)) # find the index closest to the desired angle
-
         return index 
 
     def find_closest_point(self, proc_ranges):

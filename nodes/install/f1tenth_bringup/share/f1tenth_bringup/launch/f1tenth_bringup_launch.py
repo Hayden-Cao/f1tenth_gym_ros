@@ -4,21 +4,21 @@ from launch_ros.actions import Node
 def generate_launch_description():
     ld = LaunchDescription()
 
-    safety_node = Node(
-        package='safety_node',
-        executable='safety_node',
+    my_safety_node = Node(
+        package='my_safety_node',
+        executable='my_safety_node',
         name='emergency_brake',
-        parameter=[{'use_sim_time': True}]
+        parameters=[{'use_sim_time': True}]
     )
 
-    wall_follow_node = Node(
-        package='wall_follow',
-        executable='wall_follow',
-        name='wall_follow',
-        parameter=[{'use_sim_time': True}]
+    my_wall_follow_node = Node(
+        package='my_wall_follow',
+        executable='my_wall_follow',
+        name='my_wall_follow',
+        parameters=[{'use_sim_time': True}]
     )
 
-    ld.add_action(safety_node)
-    ld.add_action(wall_follow_node)
+    ld.add_action(my_safety_node)
+    ld.add_action(my_wall_follow_node)
 
     return ld

@@ -1,0 +1,8 @@
+#Goal
+bool stop_required
+---
+#Result
+ackermann_msgs/AckermannDriveStamped speed_zero
+---
+#Feedback 
+string stop_msg

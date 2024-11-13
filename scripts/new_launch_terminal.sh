@@ -20,7 +20,7 @@ tmux split-window -t MySession:0 "/bin/bash -i"
 tmux select-layout -t MySession:0 tiled
 sleep 1
 tmux send-keys -t MySession:0.0 "ros2 launch f1tenth_gym_ros gym_bridge_launch.py" Enter  
-tmux send-keys -t MySession:0.3 "ros2 run teleop_twist_keyboard teleop_twist_keyboard" Enter  
+#tmux send-keys -t MySession:0.3 "ros2 run teleop_twist_keyboard teleop_twist_keyboard" Enter  
 
 if [ $# -eq 1 ]; then
     tmux send-keys -t MySession:0.1 "./launch_nodes.sh $NODE1" Enter

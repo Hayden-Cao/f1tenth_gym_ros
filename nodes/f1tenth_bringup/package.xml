@@ -12,8 +12,8 @@
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
-  <exec_depend>wall_follow</exec_depend>
-  <exec_depend>safety_node</exec_depend>
+  <exec_depend>my_wall_follow</exec_depend>
+  <exec_depend>my_safety_node</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

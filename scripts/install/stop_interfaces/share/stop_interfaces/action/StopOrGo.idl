@@ -1,0 +1,26 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from stop_interfaces/action/StopOrGo.action
+// generated code does not contain a copyright notice
+
+
+module stop_interfaces {
+  module action {
+    @verbatim (language="comment", text=
+      " Goal")
+    struct StopOrGo_Goal {
+      float speed;
+
+      float angle;
+    };
+    struct StopOrGo_Result {
+      @verbatim (language="comment", text=
+        " Result")
+      boolean success;
+    };
+    struct StopOrGo_Feedback {
+      @verbatim (language="comment", text=
+        " Feedback")
+      string current_movement;
+    };
+  };
+};

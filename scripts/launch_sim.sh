@@ -56,7 +56,7 @@ elif [ "$DISPLAY_VAL" == "local" ]; then
     current_mod_time=$(find nodes -type f -printf "%T@\n" | sort -n | tail -n 1)
     last_mod_time="$current_mod_time"
     if [ $# -ne 0 ]; then
-        docker exec -it f1tenth_gym_ros-sim_local-1 /bin/bash -c "./new_terminal.sh $NODE1 $NODE2"
+        docker exec -it f1tenth_gym_ros-sim_local-1 /bin/bash -c "./new_launch_terminal.sh $NODE1 $NODE2"
     else
         docker exec -it f1tenth_gym_ros-sim_local-1 /bin/bash
     fi
@@ -65,7 +65,7 @@ elif [ "$DISPLAY_VAL" == "local" ]; then
         if (( $(echo "$current_mod_time > $last_mod_time" | bc -l) )); then
             echo "Change detected. Restarting session..."
             if [ $# -ne 0 ]; then
-                docker exec -it f1tenth_gym_ros-sim_local-1 /bin/bash -c "./new_terminal.sh $NODE1 $NODE2"
+                docker exec -it f1tenth_gym_ros-sim_local-1 /bin/bash -c "./new_launch_terminal.sh $NODE1 $NODE2"
             else
                 docker exec -it f1tenth_gym_ros-sim_local-1 /bin/bash
             fi

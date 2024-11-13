@@ -1,0 +1,14 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from stop_interface/msg/StopData.msg
+// generated code does not contain a copyright notice
+
+
+module stop_interface {
+  module msg {
+    struct StopData {
+      double ittc;
+
+      double dist;
+    };
+  };
+};

@@ -1,0 +1,25 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from custom_interfaces/action/Stop.action
+// generated code does not contain a copyright notice
+
+#include "ackermann_msgs/msg/AckermannDriveStamped.idl"
+
+module custom_interfaces {
+  module action {
+    @verbatim (language="comment", text=
+      "Goal")
+    struct Stop_Goal {
+      boolean stop_required;
+    };
+    struct Stop_Result {
+      @verbatim (language="comment", text=
+        "Result")
+      ackermann_msgs::msg::AckermannDriveStamped speed_zero;
+    };
+    struct Stop_Feedback {
+      @verbatim (language="comment", text=
+        "Feedback")
+      string stop_msg;
+    };
+  };
+};

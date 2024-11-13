@@ -1,25 +1,31 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
 
 def generate_launch_description():
     ld = LaunchDescription()
 
-    safety_node = Node(
-        package='safety_node',
-        executable='safety_node',
+    my_safety_node = Node(
+        package='my_safety_node',
+        executable='my_safety_node',
         name='emergency_brake',
         parameters=[{'use_sim_time': True}]
     )
 
-    wall_follow_node = Node(
-        package='wall_follow',
-        executable='wall_follow',
-        name='wall_follow',
+    my_wall_follow_node = Node(
+        package='my_wall_follow',
+        executable='my_wall_follow',
+        name='my_wall_follow',
         parameters=[{'use_sim_time': True}]
     )
 
-    ld.add_action(safety_node)
-    ld.add_action(wall_follow_node)
+    my_action_server_node = Node(
+        package='actions_server',
+        executable='actions_server',
+        name='actions_server',
+        parameters=[{'use_sim_time': True}]
+    )
 
+    ld.add_action(my_safety_node)
+    ld.add_action(my_wall_follow_node)
+    ld.add_action(my_action_server_node)
     return ld

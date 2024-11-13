@@ -35,6 +35,7 @@ RUN apt-get update --fix-missing && \
                        ros-foxy-rviz2 \
                        ros-foxy-ros-base \
                        ros-foxy-ament-cmake \
+                       ros-foxy-rqt* \
                        bc \
                        python3-tk
 RUN apt-get -y dist-upgrade

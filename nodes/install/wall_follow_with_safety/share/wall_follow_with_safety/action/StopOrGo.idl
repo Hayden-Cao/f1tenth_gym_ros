@@ -1,0 +1,26 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from wall_follow_with_safety/action/StopOrGo.action
+// generated code does not contain a copyright notice
+
+
+module wall_follow_with_safety {
+  module action {
+    @verbatim (language="comment", text=
+      " Goal")
+    struct StopOrGo_Goal {
+      boolean stop;
+    };
+    struct StopOrGo_Result {
+      @verbatim (language="comment", text=
+        " Result")
+      boolean success;
+    };
+    struct StopOrGo_Feedback {
+      @verbatim (language="comment", text=
+        " Feedback")
+      float current_distance_to_wall;
+
+      float ittc;
+    };
+  };
+};
