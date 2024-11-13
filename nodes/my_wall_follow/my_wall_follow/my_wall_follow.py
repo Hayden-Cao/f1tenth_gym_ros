@@ -24,7 +24,7 @@ class WallFollow(Node):
         self.lookahead_dist = 0.3
         self.A_angle = np.radians(30)
         self.B_angle = np.radians(90)
-        self.action_client = ActionClient(self, StopOrGo, "stop_or_go")
+        self.action_client = ActionClient(self, StopOrGo, 'stop_or_go')
 
     def get_range(self, range_data, angle_data, angle):
         diff_array = np.absolute(angle_data - angle)
