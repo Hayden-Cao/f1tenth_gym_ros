@@ -37,7 +37,13 @@ RUN apt-get update --fix-missing && \
                        ros-foxy-ament-cmake \
                        ros-foxy-rqt* \
                        bc \
-                       python3-tk
+                       python3-tk \
+                       ros-foxy-rmw-cyclonedds-cpp \
+                       ros-foxy-navigation2 \
+                       ros-foxy-nav2-bringup \
+                       ros-foxy-turtlebot3* \
+                       ros-foxy-slam-toolbox \
+                       ros-foxy-gazebo-ros-pkgs
 RUN apt-get -y dist-upgrade
 RUN pip3 install transforms3d
 
