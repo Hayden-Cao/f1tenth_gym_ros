@@ -9,6 +9,8 @@ module stop_interfaces {
       " Goal")
     struct StopOrGo_Goal {
       float speed;
+
+      float angle;
     };
     struct StopOrGo_Result {
       @verbatim (language="comment", text=

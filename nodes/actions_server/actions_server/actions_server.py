@@ -11,16 +11,11 @@ class StopOrGoServerNode(Node):
     def __init__(self):
         super().__init__("stop_or_go_server")
         self.stop_active = False
-        self.dist_threshold = 0.4
+        self.dist_threshold = 0.35
         self.smallest_dist = float('inf')
         self.create_subscription(LaserScan, '/scan', self.scan_callback, 1)
         self.drive_control = self.create_publisher(AckermannDriveStamped, '/drive', 1)
-        self.stop_or_go_server = ActionServer(
-            self,
-            StopOrGo,
-            "stop_or_go",
-            execute_callback=self.execute_callback
-        )
+        self.stop_or_go_server = ActionServer(self, StopOrGo, "stop_or_go", execute_callback=self.execute_callback)
 
     def execute_callback(self, goal_handle: ServerGoalHandle):
         result = StopOrGo.Result()

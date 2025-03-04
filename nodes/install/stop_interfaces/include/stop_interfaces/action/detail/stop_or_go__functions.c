@@ -18,6 +18,7 @@ stop_interfaces__action__StopOrGo_Goal__init(stop_interfaces__action__StopOrGo_G
     return false;
   }
   // speed
+  // angle
   return true;
 }
 
@@ -28,6 +29,7 @@ stop_interfaces__action__StopOrGo_Goal__fini(stop_interfaces__action__StopOrGo_G
     return;
   }
   // speed
+  // angle
 }
 
 bool
@@ -38,6 +40,10 @@ stop_interfaces__action__StopOrGo_Goal__are_equal(const stop_interfaces__action_
   }
   // speed
   if (lhs->speed != rhs->speed) {
+    return false;
+  }
+  // angle
+  if (lhs->angle != rhs->angle) {
     return false;
   }
   return true;
@@ -53,6 +59,8 @@ stop_interfaces__action__StopOrGo_Goal__copy(
   }
   // speed
   output->speed = input->speed;
+  // angle
+  output->angle = input->angle;
   return true;
 }
 

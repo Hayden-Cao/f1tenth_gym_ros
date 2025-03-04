@@ -21,6 +21,7 @@ extern "C"
 typedef struct stop_interfaces__action__StopOrGo_Goal
 {
   float speed;
+  float angle;
 } stop_interfaces__action__StopOrGo_Goal;
 
 // Struct for a sequence of stop_interfaces__action__StopOrGo_Goal.

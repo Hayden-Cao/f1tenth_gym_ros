@@ -37,7 +37,7 @@ void StopOrGo_Goal_fini_function(void * message_memory)
   typed_message->~StopOrGo_Goal();
 }
 
-static const ::rosidl_typesupport_introspection_cpp::MessageMember StopOrGo_Goal_message_member_array[1] = {
+static const ::rosidl_typesupport_introspection_cpp::MessageMember StopOrGo_Goal_message_member_array[2] = {
   {
     "speed",  // name
     ::rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT,  // type
@@ -52,13 +52,28 @@ static const ::rosidl_typesupport_introspection_cpp::MessageMember StopOrGo_Goal
     nullptr,  // get_const(index) function pointer
     nullptr,  // get(index) function pointer
     nullptr  // resize(index) function pointer
+  },
+  {
+    "angle",  // name
+    ::rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT,  // type
+    0,  // upper bound of string
+    nullptr,  // members of sub message
+    false,  // is array
+    0,  // array size
+    false,  // is upper bound
+    offsetof(stop_interfaces::action::StopOrGo_Goal, angle),  // bytes offset in struct
+    nullptr,  // default value
+    nullptr,  // size() function pointer
+    nullptr,  // get_const(index) function pointer
+    nullptr,  // get(index) function pointer
+    nullptr  // resize(index) function pointer
   }
 };
 
 static const ::rosidl_typesupport_introspection_cpp::MessageMembers StopOrGo_Goal_message_members = {
   "stop_interfaces::action",  // message namespace
   "StopOrGo_Goal",  // message name
-  1,  // number of fields
+  2,  // number of fields
   sizeof(stop_interfaces::action::StopOrGo_Goal),
   StopOrGo_Goal_message_member_array,  // message members
   StopOrGo_Goal_init_function,  // function to initialize message memory (memory has to be allocated)

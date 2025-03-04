@@ -20,16 +20,32 @@ namespace action
 namespace builder
 {
 
+class Init_StopOrGo_Goal_angle
+{
+public:
+  explicit Init_StopOrGo_Goal_angle(::stop_interfaces::action::StopOrGo_Goal & msg)
+  : msg_(msg)
+  {}
+  ::stop_interfaces::action::StopOrGo_Goal angle(::stop_interfaces::action::StopOrGo_Goal::_angle_type arg)
+  {
+    msg_.angle = std::move(arg);
+    return std::move(msg_);
+  }
+
+private:
+  ::stop_interfaces::action::StopOrGo_Goal msg_;
+};
+
 class Init_StopOrGo_Goal_speed
 {
 public:
   Init_StopOrGo_Goal_speed()
   : msg_(::rosidl_runtime_cpp::MessageInitialization::SKIP)
   {}
-  ::stop_interfaces::action::StopOrGo_Goal speed(::stop_interfaces::action::StopOrGo_Goal::_speed_type arg)
+  Init_StopOrGo_Goal_angle speed(::stop_interfaces::action::StopOrGo_Goal::_speed_type arg)
   {
     msg_.speed = std::move(arg);
-    return std::move(msg_);
+    return Init_StopOrGo_Goal_angle(msg_);
   }
 
 private:

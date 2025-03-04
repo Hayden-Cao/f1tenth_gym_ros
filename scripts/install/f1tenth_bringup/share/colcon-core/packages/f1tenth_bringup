@@ -1,1 +1,1 @@
-my_safety_node:my_wall_follow
+actions_server:my_safety_node:my_wall_follow

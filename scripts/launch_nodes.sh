@@ -2,7 +2,6 @@
 
 NODE1=$1
 NODE2=$2
-
 #cd /sim_ws 
 #colcon build 
 #source /opt/ros/foxy/setup.bash                           

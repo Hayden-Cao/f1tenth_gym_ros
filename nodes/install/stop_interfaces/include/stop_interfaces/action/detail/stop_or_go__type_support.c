@@ -31,7 +31,7 @@ void StopOrGo_Goal__rosidl_typesupport_introspection_c__StopOrGo_Goal_fini_funct
   stop_interfaces__action__StopOrGo_Goal__fini(message_memory);
 }
 
-static rosidl_typesupport_introspection_c__MessageMember StopOrGo_Goal__rosidl_typesupport_introspection_c__StopOrGo_Goal_message_member_array[1] = {
+static rosidl_typesupport_introspection_c__MessageMember StopOrGo_Goal__rosidl_typesupport_introspection_c__StopOrGo_Goal_message_member_array[2] = {
   {
     "speed",  // name
     rosidl_typesupport_introspection_c__ROS_TYPE_FLOAT,  // type
@@ -46,13 +46,28 @@ static rosidl_typesupport_introspection_c__MessageMember StopOrGo_Goal__rosidl_t
     NULL,  // get_const(index) function pointer
     NULL,  // get(index) function pointer
     NULL  // resize(index) function pointer
+  },
+  {
+    "angle",  // name
+    rosidl_typesupport_introspection_c__ROS_TYPE_FLOAT,  // type
+    0,  // upper bound of string
+    NULL,  // members of sub message
+    false,  // is array
+    0,  // array size
+    false,  // is upper bound
+    offsetof(stop_interfaces__action__StopOrGo_Goal, angle),  // bytes offset in struct
+    NULL,  // default value
+    NULL,  // size() function pointer
+    NULL,  // get_const(index) function pointer
+    NULL,  // get(index) function pointer
+    NULL  // resize(index) function pointer
   }
 };
 
 static const rosidl_typesupport_introspection_c__MessageMembers StopOrGo_Goal__rosidl_typesupport_introspection_c__StopOrGo_Goal_message_members = {
   "stop_interfaces__action",  // message namespace
   "StopOrGo_Goal",  // message name
-  1,  // number of fields
+  2,  // number of fields
   sizeof(stop_interfaces__action__StopOrGo_Goal),
   StopOrGo_Goal__rosidl_typesupport_introspection_c__StopOrGo_Goal_message_member_array,  // message members
   StopOrGo_Goal__rosidl_typesupport_introspection_c__StopOrGo_Goal_init_function,  // function to initialize message memory (memory has to be allocated)

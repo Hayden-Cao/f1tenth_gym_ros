@@ -6,9 +6,11 @@ NODE2=$2
 
 #run docker exec -it f1tenth_gym_ros-sim-1 /bin/bash -c "./new_terminal.sh"
 cd /sim_ws 
-colcon build 
 source /opt/ros/foxy/setup.bash                           
-source install/local_setup.bash                          
+source install/local_setup.bash  
+colcon build     
+source /opt/ros/foxy/setup.bash                           
+source install/local_setup.bash                      
 
 tmux start-server
 # create a session with four panes

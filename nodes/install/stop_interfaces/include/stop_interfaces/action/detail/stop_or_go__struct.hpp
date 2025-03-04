@@ -38,6 +38,7 @@ struct StopOrGo_Goal_
       rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
     {
       this->speed = 0.0f;
+      this->angle = 0.0f;
     }
   }
 
@@ -48,6 +49,7 @@ struct StopOrGo_Goal_
       rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
     {
       this->speed = 0.0f;
+      this->angle = 0.0f;
     }
   }
 
@@ -55,12 +57,21 @@ struct StopOrGo_Goal_
   using _speed_type =
     float;
   _speed_type speed;
+  using _angle_type =
+    float;
+  _angle_type angle;
 
   // setters for named parameter idiom
   Type & set__speed(
     const float & _arg)
   {
     this->speed = _arg;
+    return *this;
+  }
+  Type & set__angle(
+    const float & _arg)
+  {
+    this->angle = _arg;
     return *this;
   }
 
@@ -107,6 +118,9 @@ struct StopOrGo_Goal_
   bool operator==(const StopOrGo_Goal_ & other) const
   {
     if (this->speed != other.speed) {
+      return false;
+    }
+    if (this->angle != other.angle) {
       return false;
     }
     return true;

@@ -2,7 +2,6 @@ import rclpy
 from rclpy.node import Node
 import numpy as np
 from sensor_msgs.msg import LaserScan
-from ackermann_msgs.msg import AckermannDriveStamped
 from rclpy.action import ActionClient
 from stop_interfaces.action import StopOrGo
 
@@ -12,7 +11,6 @@ class WallFollow(Node):
         lidarscan_topic = '/scan'
         drive_topic = '/drive'
         self.sub_scan = self.create_subscription(LaserScan, lidarscan_topic, self.scan_callback, 1)
-        self.pub_drive = self.create_publisher(AckermannDriveStamped, drive_topic, 1)
         self.kp = 0.255
         self.ki = -0.028
         self.kd = 0.55

@@ -37,7 +37,16 @@ RUN apt-get update --fix-missing && \
                        ros-foxy-ament-cmake \
                        ros-foxy-rqt* \
                        bc \
-                       python3-tk
+                       python3-tk \
+                       ros-foxy-rmw-cyclonedds-cpp \
+                       ros-foxy-navigation2 \
+                       ros-foxy-nav2-bringup \
+                       ros-foxy-turtlebot3* \
+                       ros-foxy-slam-toolbox \
+                       ros-foxy-gazebo-ros-pkgs \
+                       ros-foxy-joint-state-publisher-gui \
+                       ros-foxy-xacro \
+                       ros-foxy-robot-localization \
 RUN apt-get -y dist-upgrade
 RUN pip3 install transforms3d
 
@@ -54,6 +63,9 @@ RUN source /opt/ros/foxy/setup.bash && \
     apt-get update --fix-missing && \
     rosdep install -i --from-path src --rosdistro foxy -y && \
     colcon build
+
+RUN export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+RUN export TURTLEBOT3_MODEL=waffle
 
 WORKDIR '/sim_ws'
 ENTRYPOINT ["/bin/bash"]
