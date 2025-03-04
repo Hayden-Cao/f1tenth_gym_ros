@@ -1,6 +1,0 @@
-msg/StopData.idl
-msg/StopData.msg
-srv/StopOrGo.idl
-srv/StopOrGo.srv
-srv/StopOrGo_Request.msg
-srv/StopOrGo_Response.msg
